@@ -1,6 +1,6 @@
 # Treinando React e Golang
 
-Bus
+Buscando me manter afiado, apenas. Simulando situações do dia-a-dia e resolvendo os problemas com o código mais limpo possível.
 
 ## Diário de bordo
 

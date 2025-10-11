@@ -1,0 +1,55 @@
+@import '../styles/palette.less';
+
+.agendaDia {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 18px;
+
+  @media(max-width: 370px) {
+    flex-direction: column;
+  }
+
+  table {
+    border-spacing: 10px 6px;
+  }
+
+  .date {
+    background: @BeachWater2;
+    color: @BeachSky1;
+    padding: .3em;
+    margin-bottom: 15px;
+    min-width: 100px;
+  }
+  
+  .time, .timeInfo {
+    padding: .3em;
+    vertical-align: middle;
+    text-align: center;
+  }
+
+  .time {
+    font-size: .9em;
+    background: @BeachSand1;
+    min-width: 50px;
+  }
+
+  .timeInfo {
+    background: @BeachSky3;
+  }
+
+  .available {
+    font-weight: 500;
+    color: @BeachTreeLeaf2;
+  }
+
+  .unavailable {
+    * {
+      vertical-align: middle;
+    }
+
+    .icon {
+      width: 18px;
+    }
+  }
+}

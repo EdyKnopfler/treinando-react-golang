@@ -1,54 +1,7 @@
 import styles from './AgendaDia.module.less'
 import notIcon from '../assets/not.png'
 import type { AvailableTime, Scheduling } from '../model/scheduling'
-
-// TODO api
-const dates: Array<Scheduling> = [
-  { 
-    date: '20/10/2025',
-    times: [
-      { time: '12:00', qty: 0 },
-      { time: '13:00', qty: 3 },
-      { time: '14:00', qty: 2 },
-      { time: '15:00', qty: 0 },
-      { time: '16:00', qty: 1 },
-      { time: '17:00', qty: 0 },
-    ],
-  },
-  { 
-    date: '21/10/2025',
-    times: [
-      { time: '12:00', qty: 2 },
-      { time: '13:00', qty: 1 },
-      { time: '14:00', qty: 0 },
-      { time: '15:00', qty: 0 },
-      { time: '16:00', qty: 2 },
-      { time: '17:00', qty: 3 },
-    ],
-  },
-  { 
-    date: '22/10/2025',
-    times: [
-      { time: '12:00', qty: 0 },
-      { time: '13:00', qty: 3 },
-      { time: '14:00', qty: 2 },
-      { time: '15:00', qty: 0 },
-      { time: '16:00', qty: 1 },
-      { time: '17:00', qty: 0 },
-    ],
-  },
-  { 
-    date: '23/10/2025',
-    times: [
-      { time: '12:00', qty: 2 },
-      { time: '13:00', qty: 1 },
-      { time: '14:00', qty: 0 },
-      { time: '15:00', qty: 0 },
-      { time: '16:00', qty: 2 },
-      { time: '17:00', qty: 3 },
-    ],
-  },
-]
+import { dates } from '../fixtures/scheduling'
 
 export function AgendaDia() {
   return (

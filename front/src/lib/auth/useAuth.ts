@@ -7,7 +7,6 @@ type LoggedUser = {
   name: string;
   email: string;
   authToken: string;
-  refreshToken: string;
 }
 
 type AuthHook = {

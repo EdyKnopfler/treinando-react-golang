@@ -1,9 +1,15 @@
-import styles from './AgendaDia.module.less'
-import notIcon from '../assets/not.png'
-import type { AvailableTime, Scheduling } from '../model/scheduling'
-import { dates } from '../fixtures/scheduling'
+import { useParams } from 'react-router-dom'
+import styles from './Agenda.module.less'
+import notIcon from '../../assets/not.png'
+import type { AvailableTime, Scheduling } from '../../model/scheduling'
+import { dates } from '../../fixtures/scheduling'
 
-export function AgendaDia() {
+export function Agenda() {
+
+  const { idAgenda } = useParams();
+
+  console.log('Exibindo a agenda', idAgenda);
+
   return (
     <div className={styles.agendaDia}>
       {dates.map((date: Scheduling, dateIdx: number) => (

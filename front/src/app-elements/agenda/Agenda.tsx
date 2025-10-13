@@ -11,27 +11,31 @@ export function Agenda() {
   console.log('Exibindo a agenda', idAgenda);
 
   return (
-    <div className={styles.agendaDia}>
-      {dates.map((date: Scheduling, dateIdx: number) => (
-        <table key={dateIdx}>
-          <thead>
-            <tr>
-              <th></th>
-              <th className={styles.date}>{date.date}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {date.times.map((d: AvailableTime, i: number) => (
-              <tr key={i}>
-                <td className={styles.time}>{d.time}</td>
-                <td className={styles.timeInfo + ' ' + (d.qty ? styles.available : styles.unavailable)}>
-                  {d.qty ? `(${d.qty})` : <img className={styles.icon} src={notIcon} alt="Indisponível" />}
-                </td>
+    <>
+      <h2>Agenda</h2>
+      
+      <div className={styles.agendaDia}>
+        {dates.map((date: Scheduling, dateIdx: number) => (
+          <table key={dateIdx}>
+            <thead>
+              <tr>
+                <th></th>
+                <th className={styles.date}>{date.date}</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      ))}
-    </div>
+            </thead>
+            <tbody>
+              {date.times.map((d: AvailableTime, i: number) => (
+                <tr key={i}>
+                  <td className={styles.time}>{d.time}</td>
+                  <td className={styles.timeInfo + ' ' + (d.qty ? styles.available : styles.unavailable)}>
+                    {d.qty ? `(${d.qty})` : <img className={styles.icon} src={notIcon} alt="Indisponível" />}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ))}
+      </div>
+    </>
   )
 }

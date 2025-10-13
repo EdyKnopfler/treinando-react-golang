@@ -54,7 +54,12 @@ func Login(c *gin.Context) {
 
 		setRefreshTokenCookie(refreshToken, c)
 
-		c.JSON(http.StatusOK, gin.H{"accessToken": accessToken})
+		c.JSON(http.StatusOK, gin.H{
+			"id":          1,
+			"name":        "ZimTom Barriga y Pesado",
+			"accessToken": accessToken,
+		})
+
 		return
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuário ou senha inválidos"})

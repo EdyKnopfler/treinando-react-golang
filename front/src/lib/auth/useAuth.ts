@@ -1,6 +1,7 @@
-import { useState, useEffect, createContext } from "react";
+import { useState, useEffect, createContext, useMemo } from "react";
 
 const LS_USER_KEY = 'authenticated_user'
+const API_URL = import.meta.env.VITE_API_URL
 
 type LoggedUser = {
   id: number;
@@ -11,7 +12,8 @@ type LoggedUser = {
 
 type AuthHook = {
   user: LoggedUser | null;
-  login: (email: string, password: string) => void;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => void;
 };
 
 export const AuthContext = createContext<AuthHook | null>(null)
@@ -20,7 +22,6 @@ export const useAuth = () => {
   const [user, setUser] = useState<LoggedUser | null>(null)
 
   useEffect(() => {
-    // TODO api
     const userJson = localStorage.getItem(LS_USER_KEY)
 
     if (userJson) {
@@ -28,16 +29,25 @@ export const useAuth = () => {
     }
   }, [])
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const login = (email: string, password: string) => {
-    // TODO api
-    const user = { id: 1, name: 'Kânia', email, authToken: 'xxx', refreshToken: 'yyy' };
-    localStorage.setItem(LS_USER_KEY, JSON.stringify(user));
-    setUser(user);
+  const login = async (username: string, password: string) => {
+    const response = await fetch(API_URL + '/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password })
+    })
+
+    if (response.ok) {
+      const user = await response.json()
+      localStorage.setItem(LS_USER_KEY, JSON.stringify(user));
+      setUser(user);
+    }
   }
 
-  return {
-    user,
-    login,
+  const logout = () => {
+    localStorage.removeItem(LS_USER_KEY);
+    setUser(null);
   }
+
+  // Pegadinha loca: o Context está reagindo ao auth
+  return useMemo(() => ({ user, login, logout }), [user])
 }

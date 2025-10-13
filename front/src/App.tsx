@@ -4,6 +4,7 @@ import style from './App.module.less'
 import { Home } from "./app-elements/home/Home";
 import { AuthContext, useAuth } from "./lib/auth/useAuth";
 import { Protected } from "./lib/auth/Protected";
+import { Login } from "./app-elements/login/Login";
 
 function App() {
   const auth = useAuth();
@@ -14,20 +15,23 @@ function App() {
 
       <AuthContext.Provider value={auth}>
         <BrowserRouter>
-        <Routes>
-          <Route path='/auth'>
-            {/* 
-              <Route path='register' element={<Register />} />
-              <Route path='login' element={<Login />} /> 
-            */}
-          </Route>
-          <Route path="/agenda/:idAgenda" element={
-            <Protected>
-              <Agenda />
-            </Protected>
-            } /> 
-          <Route path="/" element={<Home />} /> 
-        </Routes> 
+          <Login />
+          
+          <div className={style.page}>
+            <Routes>
+              <Route path='/auth'>
+                {/* 
+                  <Route path='register' element={<Register />} />
+                */}
+              </Route>
+              <Route path="/agenda/:idAgenda" element={
+                <Protected>
+                  <Agenda />
+                </Protected>
+              } />
+              <Route path="/" element={<Home />} />
+            </Routes> 
+          </div>
         </BrowserRouter>
       </AuthContext.Provider>
     </div>

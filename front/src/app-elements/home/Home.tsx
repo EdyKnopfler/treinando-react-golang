@@ -9,8 +9,7 @@ export function Home() {
   return (
     <>
       <h2>Home Peide</h2>
-      {!auth?.user && <p><button onClick={() => auth?.login('', '')}>Entrar</button></p>}
-      {auth?.user && <p>{auth.user.name}, vá para a <Link to={`/agenda/${'id1'}`}>Agenda</Link></p>}
+      {auth?.user && <p>Vá para a <Link to={`/agenda/${'id1'}`}>Agenda</Link></p>}
     </>
   )
 }

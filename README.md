@@ -20,3 +20,8 @@ Buscando me manter afiado, apenas. Simulando situações do dia-a-dia e resolven
   - Variáveis de ambiente configuram o domínio e os segredos.
   - Contêiner Docker auxilia a replicar um ambiente de desenvolvimento Go.
 - Conectar as duas partes fica para o próximo final de semana!
+
+### Dia 3:
+
+- Login / logout
+  - Estou brincando com autenticação mas deveria na verdade usar libs prontas...

@@ -10,12 +10,15 @@ import (
 	"time"
 
 	"com.derso/treino-api/auth"
+	"com.derso/treino-api/lib"
 	"com.derso/treino-api/scheduling"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	router := gin.Default()
+
+	router.Use(lib.CORSMiddleware)
 
 	router.POST("/login", auth.Login)
 	router.POST("/refresh", auth.Refresh)
@@ -33,7 +36,7 @@ func main() {
 		}
 	}()
 
-	stop := make(chan os.Signal)
+	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGTERM, syscall.SIGINT, os.Interrupt) // os.Interrupt: Ctrl+C
 	<-stop
 
@@ -45,8 +48,5 @@ func main() {
 		fmt.Println("Erro ao encerrar servidor:", err)
 	}
 
-	select {
-	case <-ctx.Done():
-		fmt.Println("Servidor encerrado")
-	}
+	<-ctx.Done()
 }

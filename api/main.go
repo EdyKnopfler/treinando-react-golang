@@ -21,6 +21,7 @@ func main() {
 	router.Use(lib.CORSMiddleware)
 
 	router.POST("/login", auth.Login)
+	router.POST("/logout", auth.Logout)
 	router.POST("/refresh", auth.Refresh)
 	router.GET("/scheduling/:id", auth.AuthMiddleware, scheduling.GetById)
 

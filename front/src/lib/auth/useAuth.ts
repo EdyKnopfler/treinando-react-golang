@@ -13,7 +13,7 @@ type LoggedUser = {
 type AuthHook = {
   user: LoggedUser | null;
   login: (email: string, password: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 };
 
 export const AuthContext = createContext<AuthHook | null>(null)
@@ -43,7 +43,8 @@ export const useAuth = () => {
     }
   }
 
-  const logout = () => {
+  const logout = async () => {
+    await fetch(API_URL + '/logout', { method: 'POST' })
     localStorage.removeItem(LS_USER_KEY);
     setUser(null);
   }

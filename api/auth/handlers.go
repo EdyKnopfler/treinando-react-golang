@@ -66,6 +66,20 @@ func Login(c *gin.Context) {
 	}
 }
 
+func Logout(c *gin.Context) {
+	c.SetCookie(
+		refreshTokenCookie,
+		"",
+		-1,
+		"/",
+		os.Getenv("DOMAIN"),
+		true, // secure (HTTPS)
+		true, // httpOnly (no JS)
+	)
+
+	c.Status(http.StatusNoContent)
+}
+
 func Refresh(c *gin.Context) {
 	refreshToken, err := c.Cookie(refreshTokenCookie)
 

@@ -25,3 +25,4 @@ Buscando me manter afiado, apenas. Simulando situações do dia-a-dia e resolven
 
 - Login / logout
   - Estou brincando com autenticação mas deveria na verdade usar libs prontas...
+- Eu sei, eu sei, estão faltando testes automatizados. CARMA!

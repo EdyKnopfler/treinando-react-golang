@@ -8,8 +8,8 @@ export function Login() {
    const auth = useContext(AuthContext);
    const navigate = useNavigate()
 
-   const doLogout = () => {
-    auth!.logout()
+   const doLogout = async () => {
+    await auth!.logout()
     navigate('/')
    }
 

@@ -3,17 +3,18 @@ import { useState, useEffect, createContext, useMemo } from "react";
 const LS_USER_KEY = 'authenticated_user'
 const API_URL = import.meta.env.VITE_API_URL
 
-type LoggedUser = {
+export type LoggedUser = {
   id: number;
   name: string;
   email: string;
-  authToken: string;
+  accessToken: string;
 }
 
-type AuthHook = {
+export type AuthHook = {
   user: LoggedUser | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  fetchAuthenticated: (endpoint: string, method?: string, body?: object | null) => Promise<unknown>
 };
 
 export const AuthContext = createContext<AuthHook | null>(null)
@@ -49,6 +50,46 @@ export const useAuth = () => {
     setUser(null);
   }
 
+  const refresh = async () => {
+    const response = await fetch(`${API_URL}/refresh`, { method: 'POST', credentials: 'include' });
+
+    if (response.status === 200) {
+      const newData = await response.json()
+      user!.accessToken = newData.accessToken  // Store the new token silently, without trigger a re-render
+      localStorage.setItem(LS_USER_KEY, JSON.stringify(user))
+      return true
+    } else {
+      await logout()
+      return false
+    }
+  }
+
+  const fetchAuthenticated = async (endpoint: string, method: string = 'GET', body: object | null = null): Promise<unknown> => {
+    const accessToken = user!.accessToken
+    
+    const response = await fetch(
+      `${API_URL}${endpoint}`,
+      {
+        method,
+        headers: {
+          Authorization: 'Bearer ' + accessToken,
+          'Content-Type': 'application/json',
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      }
+    )
+
+    if (response.ok) {
+      return await response.json();
+    }
+
+    if (response.statusText === 'Forbidden') {
+      if (await refresh()) {
+        return fetchAuthenticated(endpoint, method)
+      }
+    }
+  }
+
   // Pegadinha loca: o Context está reagindo ao auth
-  return useMemo(() => ({ user, login, logout }), [user])
+  return useMemo(() => ({ user, login, logout, fetchAuthenticated }), [user])
 }

@@ -15,8 +15,8 @@ export function Login() {
 
    return (
     <div className={style.login}>
-      {auth?.user 
-        ? (
+      {auth?.user
+       ? (
           <span className={style.loggedUser}>
             Bem-vindo, <b>{auth.user.name}</b>. |
             <button type="button" className={"button link " + style.buttonLink} onClick={doLogout}>Sair</button>
@@ -24,7 +24,6 @@ export function Login() {
         )
         : <LoginForm />
       }
-
     </div>
    )
 }

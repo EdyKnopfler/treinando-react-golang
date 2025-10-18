@@ -16,7 +16,7 @@ Buscando me manter afiado, apenas. Simulando situações do dia-a-dia e resolven
 ### Dia 2:
 
 - Uma simples backend de autenticação em Go, com access token e refresh token
-  - Refresh token é trafegado somente via cookie HttpOnly, Secure e SameSite
+  - Refresh token é trafegado somente via cookie HttpOnly e Secure
   - Variáveis de ambiente configuram o domínio e os segredos.
   - Contêiner Docker auxilia a replicar um ambiente de desenvolvimento Go.
 - Conectar as duas partes fica para o próximo final de semana!
@@ -26,3 +26,14 @@ Buscando me manter afiado, apenas. Simulando situações do dia-a-dia e resolven
 - Login / logout
   - Estou brincando com autenticação mas deveria na verdade usar libs prontas...
 - Eu sei, eu sei, estão faltando testes automatizados. CARMA!
+
+### Dia 4
+
+- Acessando endpoint de dados com accessToken
+- Usando endpoint de refresh com refreshToken
+  - HttpOnly cross-origin _exige_ Secure
+  - O browser se recusa a enviar o cookie nessas condições
+  - Opções: 
+    - proxy do Vite para forçar mesma origem e "modo dev" para não usar o Secure
+    - certificado local para usar o Secure
+  - Hoje vamos de proxy!

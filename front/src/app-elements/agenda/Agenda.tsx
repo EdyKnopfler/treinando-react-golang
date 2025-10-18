@@ -1,21 +1,34 @@
+import { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import styles from './Agenda.module.less'
 import notIcon from '../../assets/not.png'
 import type { AvailableTime, Scheduling } from '../../model/scheduling'
-import { dates } from '../../fixtures/scheduling'
+import { AuthContext } from '../../lib/auth/useAuth'
 
 export function Agenda() {
 
+  const auth = useContext(AuthContext);
+
   const { idAgenda } = useParams();
 
-  console.log('Exibindo a agenda', idAgenda);
+  const [dates, setDates] = useState<Array<Scheduling> | null>(null);
+
+  useEffect(() => {
+    auth!.fetchAuthenticated(`/scheduling/${idAgenda}`).then((dates) => {
+      setDates(dates as Array<Scheduling>)
+    });
+  }, [auth, idAgenda]);
+
+  if (!dates) {
+    return <p>Carregando...</p>
+  }
 
   return (
     <>
       <h2>Agenda</h2>
-      
+
       <div className={styles.agendaDia}>
-        {dates.map((date: Scheduling, dateIdx: number) => (
+        {(dates as Array<Scheduling>).map((date: Scheduling, dateIdx: number) => (
           <table key={dateIdx}>
             <thead>
               <tr>

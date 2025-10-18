@@ -10,4 +10,5 @@ services:
     environment:
       JWT_SECRET: "$3gr3d0!"  # deixe bem guardado o de produção :)
       REFRESH_SECRET: "!0d3rg3$"
-      DOMAIN: localhost
+      COOKIE_DOMAIN: localhost
+      FRONT_URL: http://localhost:5173

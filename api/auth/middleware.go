@@ -11,13 +11,13 @@ func AuthMiddleware(c *gin.Context) {
 	authHeader := c.GetHeader("Authorization")
 
 	if authHeader == "" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Token não fornecido"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Token não fornecido"})
 		return
 	}
 
 	parts := strings.Split(authHeader, " ")
 	if len(parts) != 2 || parts[0] != "Bearer" {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Formato inválido do header Authorization"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Formato inválido do header Authorization"})
 		return
 	}
 
@@ -26,11 +26,17 @@ func AuthMiddleware(c *gin.Context) {
 	claims, err := VerifyAccessToken(tokenString)
 
 	if err != nil {
-		c.JSON(http.StatusForbidden, gin.H{"error": "Token inválido ou expirado"})
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Token inválido ou expirado"})
 		return
 	}
 
-	username, _ := claims["username"].(string)
+	username, ok := claims["username"].(string)
+
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{"error": "Token inválido ou expirado"})
+		return
+	}
+
 	permissions, ok := claims["permissions"].(string)
 
 	if !ok {

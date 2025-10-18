@@ -15,16 +15,60 @@ type LoginForm struct {
 	Password string `json:"password"`
 }
 
-func setRefreshTokenCookie(refreshToken string, c *gin.Context) {
+func setRefreshTokenCookie(refreshToken string, duration int, c *gin.Context) {
+	domain := os.Getenv("COOKIE_DOMAIN")
+	isDev := domain == "localhost"
+
+	if isDev {
+		domain = ""
+	}
+
+	if !isDev {
+		c.SetSameSite(http.SameSiteNoneMode) // requires Secure
+	}
+
 	c.SetCookie(
 		refreshTokenCookie,
 		refreshToken,
-		int(RefreshTokenDuration.Seconds()),
-		"/",                 // path
-		os.Getenv("DOMAIN"), // domain (opcional)
-		true,                // secure (HTTPS)
-		true,                // httpOnly (no JS)
+		duration,
+		"/",    // path
+		domain, // domain (opcional)
+		!isDev, // secure (HTTPS)
+		true,   // httpOnly (no JS)
 	)
+}
+
+func defineRefreshTokenCookie(refreshToken string, c *gin.Context) {
+	setRefreshTokenCookie(refreshToken, int(RefreshTokenDuration.Seconds()), c)
+}
+
+func cleanRefreshTokenCookie(c *gin.Context) {
+	setRefreshTokenCookie("", -1, c)
+}
+
+func loginProcess(username string, c *gin.Context) {
+	permissions := "xxxx" // TODO vindo do DB
+	accessToken, err := CreateAccessToken(username, permissions)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Erro ao autenticar"})
+		return
+	}
+
+	refreshToken, err := CreateRefreshToken(username)
+
+	if err != nil {
+		c.AbortWithStatusJSON(http.StatusInternalServerError, gin.H{"error": "Erro ao autenticar"})
+		return
+	}
+
+	defineRefreshTokenCookie(refreshToken, c)
+
+	c.JSON(http.StatusOK, gin.H{
+		"id":          1,
+		"name":        "ZimTom Barriga y Pesado",
+		"accessToken": accessToken,
+	})
 }
 
 func Login(c *gin.Context) {
@@ -32,51 +76,19 @@ func Login(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&loginForm); err != nil {
 		// TODO err.Error() é algo que pode ir para um registro de erros, mas não FICAR EXPOSTO
-		c.JSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
+		c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "JSON inválido"})
 		return
 	}
 
 	if loginForm.Username == "ZimTom" && loginForm.Password == "GÔRDO" { // TODO vindo do DB
-		permissions := "xxxx" // TODO vindo do DB
-		accessToken, err := CreateAccessToken(loginForm.Username, permissions)
-
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao autenticar"})
-			return
-		}
-
-		refreshToken, err := CreateRefreshToken(loginForm.Username)
-
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Erro ao autenticar"})
-			return
-		}
-
-		setRefreshTokenCookie(refreshToken, c)
-
-		c.JSON(http.StatusOK, gin.H{
-			"id":          1,
-			"name":        "ZimTom Barriga y Pesado",
-			"accessToken": accessToken,
-		})
-
-		return
+		loginProcess(loginForm.Username, c)
 	} else {
 		c.JSON(http.StatusUnauthorized, gin.H{"error": "Usuário ou senha inválidos"})
 	}
 }
 
 func Logout(c *gin.Context) {
-	c.SetCookie(
-		refreshTokenCookie,
-		"",
-		-1,
-		"/",
-		os.Getenv("DOMAIN"),
-		true, // secure (HTTPS)
-		true, // httpOnly (no JS)
-	)
-
+	cleanRefreshTokenCookie(c)
 	c.Status(http.StatusNoContent)
 }
 
@@ -85,27 +97,23 @@ func Refresh(c *gin.Context) {
 
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Refresh token não encontrado"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Refresh token não encontrado"})
 		return
 	}
 
 	claims, err := VerifyRefreshToken(refreshToken)
 
 	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Refresh token inválido"})
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Refresh token inválido"})
 		return
 	}
 
-	username, _ := claims["username"].(string)
+	username, ok := claims["username"].(string)
 
-	newRefreshToken, err := CreateRefreshToken(username)
-
-	if err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Erro ao gerar refresh token"})
+	if !ok {
+		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Refresh token inválido"})
 		return
 	}
 
-	setRefreshTokenCookie(newRefreshToken, c)
-
-	c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	loginProcess(username, c)
 }

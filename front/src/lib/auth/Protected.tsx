@@ -1,10 +1,10 @@
-import { type ReactNode } from "react"
-import { useAuth } from "./useAuth"
+import { useContext, type ReactNode } from "react"
+import { AuthContext } from "./useAuth"
 
 export function Protected({ children }: { children: ReactNode }) {
-  const { user } = useAuth()
+  const auth = useContext(AuthContext);
 
-  if (!user) {
+  if (!auth?.user) {
     return null
   }
   

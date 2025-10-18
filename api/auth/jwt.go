@@ -8,8 +8,8 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-const AccessTokenDuration = time.Minute * 1
-const RefreshTokenDuration = time.Minute * 10
+const AccessTokenDuration = time.Minute * 30
+const RefreshTokenDuration = time.Hour * 24
 
 var accessTokenSecret = os.Getenv("JWT_SECRET")
 var refreshTokenSecret = os.Getenv("REFRESH_SECRET")

@@ -7,9 +7,10 @@
             "request": "launch",
             "mode": "debug",
             "env": {
-                "REDIS_HOST":"127.0.0.1",
-                "REDIS_PORT":"6379",
-                "REDIS_PASSWORD":"$3nh4!"
+                "JWT_SECRET": "$3gr3d0!",
+                "REFRESH_SECRET": "!0d3rg3$",
+                "COOKIE_DOMAIN": "localhost",
+                "FRONT_URL": "http://localhost:5173",
               },
             "program": "${workspaceRoot}/api/main.go"
         }

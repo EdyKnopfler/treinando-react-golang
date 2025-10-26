@@ -1,6 +1,6 @@
 FROM golang:1.25
 
-WORKDIR /go/src
+WORKDIR /api
 ENV PATH="/go/bin:${PATH}"
 
 CMD ["tail", "-f", "/dev/null"]

@@ -37,3 +37,9 @@ Buscando me manter afiado, apenas. Simulando situações do dia-a-dia e resolven
     - proxy do Vite para forçar mesma origem e "modo dev" para não usar o Secure
     - certificado local para usar o Secure
   - Hoje vamos de proxy!
+
+
+### Dia 5
+
+- Ambiente Go configurado no Docker estava com problemas: a pasta `gopkg` junto com o projeto Go estava confundindo o gerenciador de módulos
+- Alguns _*testes*_ de endpoint

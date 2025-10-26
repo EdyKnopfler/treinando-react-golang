@@ -5,7 +5,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - .:/go/src
+      - ./api:/api
       - ./gopkg:/go/pkg/mod
     environment:
       JWT_SECRET: "$3gr3d0!"  # deixe bem guardado o de produção :)

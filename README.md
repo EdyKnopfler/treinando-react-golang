@@ -43,3 +43,9 @@ Buscando me manter afiado, apenas. Simulando situações do dia-a-dia e resolven
 
 - Ambiente Go configurado no Docker estava com problemas: a pasta `gopkg` junto com o projeto Go estava confundindo o gerenciador de módulos
 - Alguns _*testes*_ de endpoint
+
+### Dia 6
+- Consideração de segurança: mantendo lista de refresh tokens válidos
+  - Em caso de vazamento deve ser possível invalidar tokens
+- Este pequeno modelo não está conectado a um banco de dados (tenho outros modelos conectados)
+- Marcando onde executaria ações para guardar, validar e apagar os _refresh tokens_ da base de dados

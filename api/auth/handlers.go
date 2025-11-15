@@ -39,10 +39,16 @@ func setRefreshTokenCookie(refreshToken string, duration int, c *gin.Context) {
 }
 
 func defineRefreshTokenCookie(refreshToken string, c *gin.Context) {
+
+	// TODO aqui guardamos o cookie em banco de dados para posterior invalidação caso necessário
+
 	setRefreshTokenCookie(refreshToken, int(RefreshTokenDuration.Seconds()), c)
 }
 
 func cleanRefreshTokenCookie(c *gin.Context) {
+
+	// TODO aqui apagamos o cookie da base de dados
+
 	setRefreshTokenCookie("", -1, c)
 }
 
@@ -115,5 +121,9 @@ func Refresh(c *gin.Context) {
 		return
 	}
 
+	// TODO verificação da presença do cookie na base de dados e seu apagamento em seguida, pois loginProcess gera outro
+
 	loginProcess(username, c)
 }
+
+// TODO Endpoint com acesso restrito para invalidar determinado refresh token (ou todos)

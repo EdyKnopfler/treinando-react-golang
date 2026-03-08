@@ -49,3 +49,9 @@ Buscando me manter afiado, apenas. Simulando situações do dia-a-dia e resolven
   - Em caso de vazamento deve ser possível invalidar tokens
 - Este pequeno modelo não está conectado a um banco de dados (tenho outros modelos conectados)
 - Marcando onde executaria ações para guardar, validar e apagar os _refresh tokens_ da base de dados
+
+### Dia 7 (muito tempo depois)
+- Sem nada para fazer, resolvi dar um tapa no visual com ajuda de IA para escolher as cores. Não sou designer.
+
+### Dia 8
+- Tentando me manter mais nos padrões do React e boas práticas (se é que é uma boa prática implementar um hook de autenticação na mão, hahahaha)

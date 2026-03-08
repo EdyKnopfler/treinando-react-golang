@@ -12,15 +12,53 @@ export function Agenda() {
   const { idAgenda } = useParams();
 
   const [dates, setDates] = useState<Array<Scheduling> | null>(null);
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
 
   useEffect(() => {
-    auth!.fetchAuthenticated(`/scheduling/${idAgenda}`).then((dates) => {
-      setDates(dates as Array<Scheduling>)
-    });
+    if (!auth) {
+      return
+    }
+
+    let isCancelled = false;
+
+    const fetchData = async () => {
+      setLoading(true)
+      setError(null)
+      setDates(null)
+      try {
+        const datesData = await auth.fetchAuthenticated<Array<Scheduling>>(`/scheduling/${idAgenda}`)
+        if (!isCancelled) {
+          setDates(datesData)
+        }
+      } catch (err) {
+        if (!isCancelled) {
+          setError(err as Error)
+        }
+      } finally {
+        if (!isCancelled) {
+          setLoading(false)
+        }
+      }
+    }
+
+    fetchData()
+
+    return () => {
+      isCancelled = true;
+    }
   }, [auth, idAgenda]);
 
-  if (!dates) {
+  if (loading) {
     return <p>Carregando...</p>
+  }
+
+  if (error) {
+    return <p>Ocorreu um erro ao carregar a agenda: {error.message}</p>
+  }
+
+  if (!dates) {
+    return <p>Sem dados para exibir</p>
   }
 
   return (
@@ -28,8 +66,8 @@ export function Agenda() {
       <h2>Agenda</h2>
 
       <div className={styles.agendaDia}>
-        {(dates as Array<Scheduling>).map((date: Scheduling, dateIdx: number) => (
-          <table key={dateIdx}>
+        {dates.map((date) => (
+          <table key={date.date}>
             <thead>
               <tr>
                 <th></th>

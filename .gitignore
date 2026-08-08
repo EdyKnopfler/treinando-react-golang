@@ -1,3 +1,4 @@
 gopkg/
 **/__debug*
 api/main
+.env

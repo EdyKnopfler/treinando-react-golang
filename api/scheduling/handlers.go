@@ -2,7 +2,7 @@ package scheduling
 
 import (
 	_ "embed"
-	"fmt"
+	"log/slog"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,9 +16,7 @@ func GetById(c *gin.Context) {
 	username, _ := c.Get("username")
 	permissions, _ := c.Get("permissions")
 
-	fmt.Println(id)
-	fmt.Println(username)
-	fmt.Println(permissions)
+	slog.Debug("consulta de agenda", "id", id, "username", username, "permissions", permissions)
 
 	// c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	c.Data(http.StatusOK, "application/json; charset=utf-8", []byte(sample))

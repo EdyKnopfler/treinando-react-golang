@@ -7,8 +7,5 @@ services:
     volumes:
       - ./api:/api
       - ./gopkg:/go/pkg/mod
-    environment:
-      JWT_SECRET: "$3gr3d0!"  # deixe bem guardado o de produção :)
-      REFRESH_SECRET: "!0d3rg3$"
-      COOKIE_DOMAIN: localhost
-      FRONT_URL: http://localhost:5173
+    env_file:
+      - .env

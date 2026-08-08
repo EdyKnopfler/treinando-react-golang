@@ -13,6 +13,10 @@ export function Login() {
     navigate('/')
    }
 
+   if (auth?.initializing) {
+    return null
+   }
+
    return (
     <div className={style.login}>
       {auth?.user

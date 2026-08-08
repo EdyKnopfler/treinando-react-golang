@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 
@@ -102,7 +102,7 @@ func Refresh(c *gin.Context) {
 	refreshToken, err := c.Cookie(refreshTokenCookie)
 
 	if err != nil {
-		fmt.Println(err)
+		slog.Warn("refresh token não encontrado no cookie", "error", err)
 		c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "Refresh token não encontrado"})
 		return
 	}

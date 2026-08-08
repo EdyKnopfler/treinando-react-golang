@@ -48,7 +48,7 @@ func CreateRefreshToken(username string) (string, error) {
 func verifyToken(tokenString string, secret string) (jwt.MapClaims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		return []byte(secret), nil
-	})
+	}, jwt.WithValidMethods([]string{jwt.SigningMethodHS256.Name}))
 
 	if err != nil {
 		return nil, err
